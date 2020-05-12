@@ -1,0 +1,22 @@
+/************************************************************
+	文件: $NewBehaviourScript$.cs
+	作者: 那位先生
+	邮箱: 1279544114@qq.com
+	日期: $Time$
+	功能: 功能说明
+*************************************************************/
+using UnityEngine;
+using UnityEngine.UI;
+
+public class $NewBehaviourScript$ : UIWndLogic 
+{
+	#region UI组件
+$UI Component Variables$
+	#endregion
+	
+	//查找UI组件的代码
+	protected override void FindUIComponent()
+	{
+$FindUICode$
+	}
+}
