@@ -3,20 +3,30 @@
 	作者: 那位先生
 	邮箱: 1279544114@qq.com
 	日期: $Time$
-	功能: 功能说明
+	功能: UI模板
+		  UIFormBase为UI基类
+		  FindUIComponent()， RegistEvent()为基类俩个方法
+		  在基类初始化时调用
 *************************************************************/
 using UnityEngine;
 using UnityEngine.UI;
 
-public class $NewBehaviourScript$ : UIWndLogic 
+public class $NewBehaviourScript$ : UIFormBase 
 {
 	#region UI组件
 $UI Component Variables$
 	#endregion
-	
-	//查找UI组件的代码
+	#region 重新方法
 	protected override void FindUIComponent()
 	{
 $FindUICode$
 	}
+	protected override void RegistEvent()
+	{
+$AddBtnCode$
+	}
+	#endregion
+	#region UI事件
+$UIEventCode$
+	#endregion
 }

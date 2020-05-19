@@ -24,7 +24,7 @@ namespace Game.Editor
         //字符串1，声明组件代码的模板
         private const string Image = "\tprivate Image m_{0};";
         private const string Text = "\tprivate Text m_{0};";
-        private const string Button = "\tprivate Button m_{0};";
+        private const string Button = "\tprivate GameObject m_{0};";
         private const string Transform = "\tprivate Transform m_{0};";
         private const string InputField = "\tprivate InputField m_{0};";
         private const string ScrollRect = "\tprivate ScrollRect m_{0};";
@@ -33,12 +33,10 @@ namespace Game.Editor
         private const string Slider = "\tprivate Slider m_{0};";
         private const string Toggle = "\tprivate Toggle m_{0};";
 
-        /// <summary>
-        /// 字符串2，查找组件代码的模板
-        /// </summary>
+        // 字符串2，查找组件代码的模板
         private const string FindImage = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<Image>();";
         private const string FindText = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<Text>();";
-        private const string FindButton = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<Button>();";
+        private const string FindButton = "\t\tm_{0} = transform.Find(\"{1}\").gameObject;";
         private const string FindInputField = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<InputField>();";
         private const string FindScrollRect = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<ScrollRect>();";
         private const string FindDropdown = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<Dropdown>();";
@@ -47,6 +45,12 @@ namespace Game.Editor
         private const string FindToggle = "\t\tm_{0} = transform.Find(\"{1}\").GetComponent<Toggle>();";
         private const string FindTransform = "\t\tm_{0} = transform.Find(\"{1}\");";
 
+        // 字符串3，查找组件代码的模板
+        private const string RegistEvent = "\t\tUIEventListener.RegistListener(UIEventType.Click,m_{0},OnClick{0});";
+        // 字符串3，查找组件代码的模板
+        private const string EventFuncCode = "\tprivate  void OnClick{0}(GameObject go)\n\t";
+
+        //脚本名称，和预制体名称一致
         private static string m_ScriptName = "";
 
         private static GameObject m_Root = null;
@@ -70,6 +74,10 @@ namespace Game.Editor
             string m_UIComponentCode = "";
             //查找组件代码字符串
             string m_FindUIComponentCode = "";
+            //注册按钮代码
+            string m_RegistUICode = "";
+            //按钮事件代码
+            string m_UIEventCode = "";
 
             m_NameList.Clear();
             for (int i = 0; i < m_TreeViewItem.Count; i++)
@@ -89,11 +97,27 @@ namespace Game.Editor
                 string m_UIComCode = "";
                 //单条查找组件代码字符串
                 string m_FindUIComCode = "";
+                //单条注册按钮代码
+                string m_ReUICode = "";
+                //单条按钮事件代码
+                string m_UIEveCode = "";
                 string name = uITreeViewItem.displayName.ToUpper();
                 if (name.Contains("BUTTON") || name.Contains("BTN"))//按钮
                 {
                     m_FindUIComCode = string.Format(FindButton, uITreeViewItem.Name.Replace(" ",""), uITreeViewItem.Path);
                     m_UIComCode = string.Format(Button, uITreeViewItem.Name.Replace(" ", ""));
+                    m_ReUICode = string.Format(RegistEvent, uITreeViewItem.Name.Replace(" ", ""));
+                    m_UIEveCode = string.Format(EventFuncCode, uITreeViewItem.Name.Replace(" ", ""))+"{\n\t}";
+                    if (m_RegistUICode != "")
+                    {
+                        m_RegistUICode = m_RegistUICode + "\n" + m_ReUICode;
+                    }
+                    else { m_RegistUICode += m_ReUICode; }
+                    if (m_UIEventCode != "")
+                    {
+                        m_UIEventCode = m_UIEventCode + "\n" + m_UIEveCode;
+                    }
+                    else { m_UIEventCode += m_UIEveCode; }
                 }
                 //图片
                 else if (name.Contains("IMAGE") || name.Contains("IMG") || name.Contains("BG") || name.Contains("ICON") || name.Contains("TEXTURE"))
@@ -162,6 +186,7 @@ namespace Game.Editor
             }
             UICode = File.ReadAllText(TemplatePath);
             UICode = UICode.Replace("$UI Component Variables$", m_UIComponentCode).Replace("$FindUICode$", m_FindUIComponentCode).Replace("$NewBehaviourScript$", m_ScriptName);
+            UICode = UICode.Replace("$AddBtnCode$", m_RegistUICode).Replace("$UIEventCode$", m_UIEventCode);
             UICode = UICode.Replace("$Time$", string.Concat(DateTime.Now.Year, "/", DateTime.Now.Month, "/", DateTime.Now.Day, " ", DateTime.Now.Hour, ":", DateTime.Now.Minute, ":", DateTime.Now.Second));
             return UICode;
         }

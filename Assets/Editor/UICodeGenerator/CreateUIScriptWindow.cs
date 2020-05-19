@@ -64,7 +64,7 @@ namespace Game.Editor
 
             _scrollPos2 = EditorGUILayout.BeginScrollView(_scrollPos2, "Box", GUILayout.Width(708), GUILayout.Height(500));
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField(UIScript.UICode, GUIStyle, GUILayout.Width(650), GUILayout.Height(400 + 35 * m_TreeView.GetSelectNum()));
+            EditorGUILayout.LabelField(UIScript.UICode, GUIStyle, GUILayout.Width(650), GUILayout.Height(500 + 105 * m_TreeView.GetSelectNum()));
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndHorizontal();
