@@ -56,8 +56,6 @@ namespace Game.Editor
         private static GameObject m_Root = null;
         //脚本保存路径
         private static string Path = Application.dataPath + "/Scripts/UI";
-        //脚本模板路径
-        private static string TemplatePath = Application.dataPath + "/Editor/UICodeGenerator/Template/Template.txt";
 
         //保存需要生成的组件的名称
         private static List<string> m_NameList = new List<string>();
@@ -184,7 +182,7 @@ namespace Game.Editor
                 }
                 else { m_UIComponentCode += m_UIComCode; }
             }
-            UICode = File.ReadAllText(TemplatePath);
+            UICode = Resources.Load<TextAsset>("Template").text;
             UICode = UICode.Replace("$UI Component Variables$", m_UIComponentCode).Replace("$FindUICode$", m_FindUIComponentCode).Replace("$NewBehaviourScript$", m_ScriptName);
             UICode = UICode.Replace("$AddBtnCode$", m_RegistUICode).Replace("$UIEventCode$", m_UIEventCode);
             UICode = UICode.Replace("$Time$", string.Concat(DateTime.Now.Year, "/", DateTime.Now.Month, "/", DateTime.Now.Day, " ", DateTime.Now.Hour, ":", DateTime.Now.Minute, ":", DateTime.Now.Second));
